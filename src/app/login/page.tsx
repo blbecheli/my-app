@@ -1,22 +1,59 @@
-import Image from "next/image"
+// page.tsx
+import Form from './form'
+import prisma from '@/db'
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
-const page = () => {
+
+
+const page = async () => {
+
+  const loginUser = async (formData: FormData) => {
+    'use server'
+
+    const user = formData.get('user')?.valueOf()
+    const password = formData.get('password')?.valueOf()
+
+    if (typeof user !== 'string' || user.length === 0) {
+      throw new Error('User is not a string or is empty')
+    }
+
+    if (typeof password !== 'string' || password.length === 0) {
+      throw new Error('Password description is required')
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: user
+      }
+    })
+
+    if (!existingUser) {
+      throw new Error('User dont exist')
+    }
+
+    if (existingUser.password !== password) {
+      throw new Error('Password dont match')
+    }
+
+    await prisma.user.update({
+      where: {
+        email: user
+      },
+      data: {
+        logged: true
+      }
+    })    
+    
+
+    revalidatePath('/');
+    revalidatePath('/navbar');
+    redirect('/');
+  }
+
   return (
-    <div className="flex flex-col w-[50vw] mx-auto my-4 border-gray-200 border-2 rounded-xl px-[1rem] py-[1rem] text-center">
-      <Image src = "/images/logo.png" alt = "Logo" width = {64} height = {64} className="m-auto" />
-      <h3 className="mt-5">Welcome back! Your journey continues, and we're excited to have you back in the picture. Dive into your world of memories, connect with friends, and share the moments that matter. Let's pick up where we left off – log in and rediscover the magic!</h3>
-      <div className="flex mt-[3rem] m-auto">
-      <form className="flex flex-col">
-        <label className="flex flex-col mb-[1rem]"> Create your user
-          <input type="text" name="user" required placeholder="Choose a user" className="border-zinc-500 border-2 rounded-md mt-1"/>
-        </label>
-        <label className="flex flex-col mb-[1rem]"> Choose a password
-          <input type="password" name="password" required placeholder="Password" className="border-zinc-500 border-2 rounded-md mt-1" />
-        </label>        
-        <input type="submit" value="Login" className="rounded-lg bg-blue-700 p-auto text-white" />        
-      </form>      
-      </div>
-    </div>
+    <Form onSubmit={loginUser} />
   )
 }
+
 export default page

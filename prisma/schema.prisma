@@ -25,4 +25,5 @@ model Post {
   content   String
   createdAt DateTime @default(now())  
   idUser    String
+  image     String
 }

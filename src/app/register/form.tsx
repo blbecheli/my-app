@@ -2,17 +2,15 @@
 
 import Image from "next/image"
 import Link from "next/link"
-// import type { Metadata } from 'next'
-// import prisma from "@/db"
-// import { redirect } from 'next/navigation'
-// // import { useState } from "react"
 
 
 const Form = ({onSubmit}) => {
   const handleSubmit = (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
-    onSubmit(formData)
+    onSubmit(formData).catch((error) => {
+      console.error(error)
+    })
   }
   
   return (

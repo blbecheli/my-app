@@ -1,29 +1,64 @@
-"use client"; // Isso é um componente do cliente
+import Image from "next/image"
+import Link from "next/link"
+import prisma from "@/db"
+import { redirect } from 'next/navigation'
+import cloudinary from "@/cloudinary"
+import getUserData from "../hook/logged"
+import Post from "./post"
+import { revalidatePath } from 'next/cache'
 
 
-export default function Page() { 
+
+const page = async () => {   
+
+  const logIn = await getUserData()
+  const name = process.env.NEXT_PUBLIC_CLOUD_NAME
+
+  const PostAdd = async (formData: FormData) => {
+    'use server'
+
+    const title = formData.get('title')?.valueOf()
+    const content = formData.get('content')?.valueOf()
+    const password = formData.get('password')?.valueOf()
+
+    if (typeof title !== 'string' || title.length === 0) {
+      throw new Error('User is not a string or is empty')
+    }
+
+    if (typeof content !== 'string' || content.length === 0) {
+      throw new Error('User is not a string or is empty')
+    }
+
+    if (logIn?.id == null) {
+      redirect('/')
+    }
+
+    if (typeof password !== 'string' || password.length === 0) {
+      throw new Error('Password description is required')
+    }
+    
+
+    await prisma.post.create({
+      data: {
+        title: title,
+        content: content,
+        idUser: logIn.id, // Adicione a propriedade idUser com um valor vazio ou defina o valor apropriado
+        image: '' // Adicione a propriedade image com um valor vazio ou defina o valor apropriado
+      }
+    })
+     
+    
+
+    revalidatePath('/');
+    revalidatePath('/navbar');
+    redirect('/');
+  }
+  
 
   return (
-    <div className="w-[100vw] flex flex-col">
-      <h3 className="text-center">Ready to amplify your story? ...</h3>
-      <div>
-        <form  className="flex flex-col w-[70%] m-auto">
-          <label className="flex flex-col">
-            Title
-            <input name="title" type="text" className="border-zinc-500 border-2 rounded-md mt-1" />
-          </label>
-          <label className="flex flex-col">
-            Tell us a little about your picture
-            <textarea name="description" cols={30} rows={10} className="border-zinc-500 border-2 rounded-md mt-1"></textarea>            
-          </label>
-          <label className="flex flex-col">
-            Link to your picture
-            <input type="text" name="link" className="border-zinc-500 border-2 rounded-md mt-1" />
-          </label>
-          <input type="submit" value="Publish" />
-
-        </form>
-      </div>
-    </div>
+    <Post onSubmit = {PostAdd}/>
   );
 }
+
+
+export default page;
