@@ -1,56 +1,48 @@
-import Image from "next/image"
 import Link from "next/link"
 import prisma from "@/db"
 import { redirect } from 'next/navigation'
-import cloudinary from "@/cloudinary"
 import getUserData from "../hook/logged"
 import Post from "./post"
-import { revalidatePath } from 'next/cache'
-
 
 
 const page = async () => {   
 
   const logIn = await getUserData()
-  const name = process.env.NEXT_PUBLIC_CLOUD_NAME
+  
 
   const PostAdd = async (formData: FormData) => {
     'use server'
 
     const title = formData.get('title')?.valueOf()
-    const content = formData.get('content')?.valueOf()
-    const password = formData.get('password')?.valueOf()
+    const content = formData.get('content')?.valueOf()    
+    const image = formData.get('image')?.valueOf()
 
     if (typeof title !== 'string' || title.length === 0) {
-      throw new Error('User is not a string or is empty')
+      throw new Error('Title is not a string or is empty')
     }
 
     if (typeof content !== 'string' || content.length === 0) {
-      throw new Error('User is not a string or is empty')
+      throw new Error('Content is not a string or is empty')
     }
 
     if (logIn?.id == null) {
       redirect('/')
     }
+       
 
-    if (typeof password !== 'string' || password.length === 0) {
-      throw new Error('Password description is required')
-    }
-    
+    if (typeof image !== 'string' || image.length === 0) {
+      throw new Error('image is not a string or is empty')
+    }      
 
     await prisma.post.create({
       data: {
         title: title,
         content: content,
-        idUser: logIn.id, // Adicione a propriedade idUser com um valor vazio ou defina o valor apropriado
-        image: '' // Adicione a propriedade image com um valor vazio ou defina o valor apropriado
+        idUser: logIn.id,
+        image: image
       }
-    })
-     
+    })      
     
-
-    revalidatePath('/');
-    revalidatePath('/navbar');
     redirect('/');
   }
   

@@ -1,14 +1,11 @@
 'use client'
 import { useState } from "react"
-import { CldImage } from 'next-cloudinary';
 import { CldUploadWidget } from 'next-cloudinary';
 
 
-
-
 const post = ({ onSubmit }) => {
-const [resource, setResource] = useState(undefined);
-console.log(resource);
+    const [resource, setResource] = useState();
+    console.log(resource);
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -16,9 +13,9 @@ console.log(resource);
         onSubmit(formData).catch((error: any) => {
             console.log(error);
         })
-    }   
+    }
     return (
-        <div className="w-[100vw] flex flex-col">
+        <div className="w-[100vw] flex flex-col">            
             <h3 className="text-center">Ready to amplify your story? ...</h3>
             <div>
                 <form onSubmit={handleSubmit} className="flex flex-col w-[70%] m-auto">
@@ -30,15 +27,13 @@ console.log(resource);
                         Tell us a little about your picture
                         <textarea name="content" cols={30} rows={10} className="border-zinc-500 border-2 rounded-md mt-1"></textarea>
                     </label>
-                    <label className="flex flex-col">
-                        Link to your picture
-                        <input type="text" name="link" className="border-zinc-500 border-2 rounded-md mt-1" />
-                    </label>
-                    <input type="submit" value="Publish" />
+                    <label className="flex flex-col">                        
+                        <input type="text" name="image" className="border-zinc-500 border-2 rounded-md mt-1 visibility: hidden" value={resource}/>
+                    </label>                    
                     <CldUploadWidget
-                        uploadPreset="<Your Upload Preset>"
+                        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME}
                         onSuccess={(result, { widget }) => {
-                            setResource(result?.info);
+                            setResource(result?.info?.url);
                             widget.close();
                         }}
                     >
@@ -54,6 +49,7 @@ console.log(resource);
                             );
                         }}
                     </CldUploadWidget>
+                    <input type="submit" value="Publish" />
                 </form>
             </div>
         </div>

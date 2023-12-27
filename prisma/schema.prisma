@@ -11,19 +11,28 @@ datasource db {
 }
 
 model User {
-  id        String @id @default(uuid())
+  id        String   @id @default(uuid())
   email     String   @unique
   name      String?
   password  String
   createdAt DateTime @default(now())
-  logged  Boolean  @default(false)  
+  logged    Boolean  @default(false)
+  image     String @default("")
+  friends   Friend[]
+}
+
+model Friend {
+  id       String @id @default(uuid())
+  friendId String
+  userId   String
+  User     User   @relation(fields: [userId], references: [id])
 }
 
 model Post {
-  id        String @id @default(uuid())
+  id        String   @id @default(uuid())
   title     String
   content   String
-  createdAt DateTime @default(now())  
+  createdAt DateTime @default(now())
   idUser    String
-  image     String
+  image     String?
 }

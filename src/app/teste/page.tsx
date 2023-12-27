@@ -1,11 +1,15 @@
 import getUserData from "../hook/logged"
+import IdUser from "./id"
 
 const page = async() => {
 
     const logIn = await getUserData()
+
+  
+
   return (
     <div>
-        <p>{logIn?.name}</p>
+       <IdUser value = {logIn.id}/>
     </div>
   )
 }

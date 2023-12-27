@@ -2,15 +2,26 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import { useState } from "react"
+import { CldUploadWidget } from 'next-cloudinary';
+import { useRouter } from 'next/navigation'
 
 
 const Form = ({onSubmit}) => {
-  const handleSubmit = (event) => {
+  const router = useRouter()
+  const [resource, setResource] = useState();
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
-    onSubmit(formData).catch((error) => {
-      console.error(error)
-    })
+    try {
+      const userid = await onSubmit(formData)         
+      document.cookie = `userid=${userid}` 
+      console.log(userid);
+      router.refresh()
+      router.push("/")      
+    } catch (error) {
+      console.log(error);
+    }
   }
   
   return (
@@ -31,7 +42,27 @@ const Form = ({onSubmit}) => {
         <label className="flex flex-col mb-[1rem]"> Repeat the password
           <input type="password" name="password2" required placeholder="Repeat password" className="border-zinc-500 border-2 rounded-md mt-1"/>
         </label>
-        <input type="submit" value="Submit" className="rounded-lg bg-blue-700 p-auto text-white"/>       
+        <input type="text" name="image" className="visibility: hidden" value={resource}/>
+        <CldUploadWidget
+                        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME}
+                        onSuccess={(result, { widget }) => {
+                            setResource(result?.info?.url);
+                            widget.close();
+                        }}
+                    >
+                        {({ open }) => {
+                            function handleOnClick() {
+                                setResource(undefined);
+                                open();
+                            }
+                            return (
+                                <button onClick={handleOnClick}>
+                                    Upload an Image
+                                </button>
+                            );
+                        }}
+                    </CldUploadWidget> 
+        <input type="submit" value="Submit" className="rounded-lg bg-blue-700 p-auto text-white"/>             
         <p>Have an account? <Link href="/login">Log in</Link> </p>
       </form>      
       </div>

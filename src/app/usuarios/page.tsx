@@ -13,6 +13,7 @@ const page = async() => {
                         <p>{user.password}</p>
                         <p>{user.createdAt.toString()}</p>
                         <p>{user.logged.toString()}</p>
+                        <p>{user.image}</p>
                         <br />
                     </div>
                 )}

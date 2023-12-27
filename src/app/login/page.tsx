@@ -2,8 +2,7 @@
 import Form from './form'
 import prisma from '@/db'
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-
+import { redirect} from 'next/navigation'
 
 
 const page = async () => {
@@ -36,24 +35,35 @@ const page = async () => {
       throw new Error('Password dont match')
     }
 
-    await prisma.user.update({
+    const updateUser = await prisma.user.update({
       where: {
         email: user
       },
       data: {
         logged: true
+      },
+      select: {
+        id: true
       }
-    })    
-    
+    })
 
-    revalidatePath('/');
-    revalidatePath('/navbar');
-    redirect('/');
+    const userId = updateUser.id;
+    revalidatePath('/', 'layout')
+    // revalidatePath('/navbar')
+    // revalidatePath('/')
+    
+    return userId
+
   }
 
+
   return (
-    <Form onSubmit={loginUser} />
+    <>
+    <Form onSubmit={loginUser} />    
+    </>
+    
   )
 }
 
 export default page
+

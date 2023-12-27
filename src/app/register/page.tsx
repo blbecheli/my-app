@@ -3,7 +3,7 @@ import prisma from '@/db'
 import { redirect } from 'next/navigation'
 
 
-const page = () => {    
+const page = () => {
 
     const AddUser = async (formData: FormData) => {
         'use server'
@@ -12,6 +12,7 @@ const page = () => {
         const email = formData.get('email')?.valueOf()
         const password = formData.get('password')?.valueOf()
         const password2 = formData.get('password2')?.valueOf()
+        const image = formData.get('image')?.valueOf()
 
         if (typeof user !== 'string' || user.length === 0) {
             throw new Error('User is not a string or is empty')
@@ -29,6 +30,10 @@ const page = () => {
             throw new Error('Password dont match')
         }
 
+        if (typeof image !== 'string' || image.length === 0) {
+            throw new Error('image is not a string or is empty')
+        }
+
         // Verificar se o e-mail já existe no banco de dados
         const existingUser = await prisma.user.findUnique({
             where: {
@@ -40,18 +45,22 @@ const page = () => {
             throw new Error('User already exist')
         }
 
-        await prisma.user.create({
+        const createUser = await prisma.user.create({
             data: {
                 name: user,
                 email: email,
                 password: password,
                 logged: true,
+                image: image
+            }, select: {
+                id: true
             }
         })
 
+        const userId = createUser.id;
 
-
-        redirect('/')
+        return userId
+        
     }
 
     return (
