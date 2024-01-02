@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -17,15 +18,20 @@ model User {
   password  String
   createdAt DateTime @default(now())
   logged    Boolean  @default(false)
-  image     String @default("")
-  friends   Friend[]
+  image     String   @default("")  
+  Post      Post[]
+  MessageU   Message[] @relation("user")
+  MessageF   Message[] @relation("friend")
+  FriendU   Friend[] @relation("user")
+  FriendF   Friend[] @relation("friend")  
 }
 
 model Friend {
-  id       String @id @default(uuid())
-  friendId String
-  userId   String
-  User     User   @relation(fields: [userId], references: [id])
+  id         String @id @default(uuid())
+  friendId   String
+  userId     String
+  idUser     User   @relation("user",fields: [userId], references: [id])
+  idFriend   User   @relation("friend",fields: [friendId], references: [id])
 }
 
 model Post {
@@ -35,4 +41,26 @@ model Post {
   createdAt DateTime @default(now())
   idUser    String
   image     String?
+  user      User     @relation(fields: [idUser], references: [id])
+  Search    Search[]
 }
+
+model Search {
+  id        String   @id @default(uuid())
+  searchId  String
+  idUser    String
+  idPost    String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [idPost], references: [id])
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  idUser    String
+  idFriend  String
+  content   String
+  createdAt DateTime @default(now())
+  user      User     @relation("user", fields: [idUser], references: [id])
+  friend    User     @relation("friend",fields: [idFriend], references: [id])
+}
+

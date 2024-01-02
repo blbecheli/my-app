@@ -1,4 +1,4 @@
-import getUserData from "../hook/logged"
+import getUserData from "../../hook/logged"
 import IdUser from "./id"
 
 const page = async() => {

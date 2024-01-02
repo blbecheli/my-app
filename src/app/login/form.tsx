@@ -3,11 +3,13 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { redirect } from "next/navigation"
 import { useRouter } from 'next/navigation'
+import UserContext from "@/components/context/userContext"
+import { useContext } from "react"
 
 
 const Form = ({ onSubmit }) => {
+  const {setIdUser, setIdCookie} = useContext(UserContext)
   const router = useRouter()
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -15,7 +17,9 @@ const Form = ({ onSubmit }) => {
     try {
       const userid = await onSubmit(formData)         
       document.cookie = `userid=${userid}` 
-      console.log(userid);
+      setIdUser(userid)
+      setIdCookie(userid)
+      // console.log(userid);
       router.refresh()
       router.push("/")      
     } catch (error) {

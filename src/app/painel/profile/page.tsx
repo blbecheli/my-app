@@ -1,8 +1,9 @@
-import getUserData from "@/app/hook/logged"
+import getUserData from "@/hook/logged"
 import Layout from "../page"
 import { redirect } from 'next/navigation'
 import prisma from "@/db"
-import Image from 'next/image';
+import Profile from "./profile"
+
 
 
 const page = async () => {
@@ -20,19 +21,14 @@ const page = async () => {
     select: {
       name: true,
       email: true,
-      image: true,      
+      image: true,
     }
+
   })
 
   return (
     <Layout>
-    <div>
-    {profile?.image == "" ? (<Image src="/images/profile.svg" alt="" width={100} height={100} />) :    
-    <img src={profile?.image} alt="my picture" />
-    }
-    <p>{profile?.name}</p>
-    <p>{profile?.email}</p>    
-    </div>
+      <Profile data={profile}/>
     </Layout>
   )
 }

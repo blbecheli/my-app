@@ -2,7 +2,7 @@
 import Form from './form'
 import prisma from '@/db'
 import { revalidatePath } from 'next/cache'
-import { redirect} from 'next/navigation'
+
 
 
 const page = async () => {

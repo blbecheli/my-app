@@ -1,0 +1,7 @@
+-- CreateTable
+CREATE TABLE "Search" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "idUser" TEXT NOT NULL,
+    "idPost" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

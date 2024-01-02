@@ -1,7 +1,7 @@
 import Link from "next/link"
 import prisma from "@/db"
 import { redirect } from 'next/navigation'
-import getUserData from "../hook/logged"
+import getUserData from "../../hook/logged"
 import Post from "./post"
 
 

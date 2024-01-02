@@ -3,12 +3,12 @@ import Logout from './logout'
 import prisma from '@/db'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import getUserData from "@/app/hook/logged"
+import getUserData from "@/hook/logged"
 import { cookies } from "next/headers";
 
 
 const page = async () => {
-'use server'
+    'use server'
     const loginUser = async (formData: FormData) => {
         'use server'
 
@@ -22,19 +22,11 @@ const page = async () => {
                 logged: false
             }
         })
-        
-            cookies().delete('userid')
-          
-      
-        //   async function create() {
-        //     cookies().set('name', '')
-        //   }
 
-              
-        // revalidatePath('/');        
-        revalidatePath('/', 'layout')
+        cookies().delete('userid')
+        // revalidatePath('/')
         redirect('/')
-        
+
     }
 
     return (

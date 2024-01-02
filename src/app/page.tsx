@@ -1,4 +1,3 @@
-import Navbar from '@/components/Navbar'
 import HomePage from '@/components/Home'
 import styles from './page.module.css'
 

@@ -1,11 +1,11 @@
-import List from "./List"
-import Navbar from "./Navbar"
+import List from "./list/List"
+import Navbar from "./navbar/Navbar"
 import Sidebar from "./Sidebar"
 
 const HomePage = () => {
   return (
     <div className="h-full">      
-      <div className="flex">
+      <div className="sm:flex">
         <Sidebar />
         <List />
       </div>

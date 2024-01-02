@@ -10,26 +10,24 @@ const SidebarLink = ({ href, children }) => (
 );
 
 const Layout = ({ children }) => (
-  <div className='flex'>
-    <div className='w-[20vw] mx-auto text-center'>
+  <div className='sm:flex'>
+    <div className='sm:w-[20vw] mx-auto text-center flex sm:flex-col justify-around sm:justify-between sm:h-[40vh] mb-3'>
       <SidebarLink href="/painel/profile">
         <div>
-          <Image src="/images/myprofile.svg" alt="Next.js Logo" width={25} height={25} />
-          <p>My profile</p>
-          <hr />
+          <Image src="/images/myprofile.svg" alt="Next.js Logo" width={25} height={25} className='m-auto'/>
+          <p className='hidden sm:inline'>My profile</p>          
         </div>
       </SidebarLink>
       <SidebarLink href="/painel/posts">
         <div>
-        <Image src="/images/myposts.svg" alt="Next.js Logo" width={25} height={25} />
-        <p>My Posts</p>
-        <hr />
+        <Image src="/images/myposts.svg" alt="Next.js Logo" width={25} height={25} className='m-auto'/>
+        <p className='hidden sm:inline'>My Posts</p>        
         </div>
       </SidebarLink>
       <SidebarLink href="/painel/friends">
         <div>
-          <Image src="/images/friends.svg" alt="Next.js Logo" width={25} height={25} />
-          <p>My friends</p>          
+          <Image src="/images/friends.svg" alt="Next.js Logo" width={25} height={25} className='m-auto'/>
+          <p className='hidden sm:inline'>My friends</p>          
         </div>
       </SidebarLink>
     </div>

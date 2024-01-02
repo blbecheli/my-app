@@ -4,8 +4,9 @@ import myCookie from "./cookie";
 import prisma from "@/db";
 import { cookies } from "next/headers";
 
+
 const cookie = async () => {
-  const idCookie =  await cookies()?.get("userid")?.value;  
+  const idCookie = await cookies()?.get("userid")?.value;
   return idCookie;
 }
 
@@ -13,11 +14,11 @@ const login = async () => {
   const cookieV = await cookie();
   let prismadb;
 
-if (cookieV === undefined) {
+  if (cookieV === undefined) {
     return false;
   }
 
-const cookiedata = await prisma.user.findUnique({
+  const cookiedata = await prisma.user.findUnique({
     where: {
       id: cookieV
     },
@@ -26,10 +27,16 @@ const cookiedata = await prisma.user.findUnique({
       id: true,
       image: true,
       name: true,
-    },  
-})
+      email: true,
+      password: true,
+    },
+  })
 
- return cookiedata
+  if (cookiedata?.logged == false) {
+    return false
+  } else {
+    return cookiedata
+  }
 
 
 };

@@ -16,7 +16,7 @@ const Form = ({onSubmit}) => {
     try {
       const userid = await onSubmit(formData)         
       document.cookie = `userid=${userid}` 
-      console.log(userid);
+      // console.log(userid);
       router.refresh()
       router.push("/")      
     } catch (error) {
