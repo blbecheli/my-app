@@ -15,17 +15,32 @@ const Page = async () => {
         {!idFriends ? (
           <p className="text-center">You don't have friends yet</p>
         ) : (
-          idFriends.map((friend) => (
-            <div key={friend.id} className="flex justify-between mb-4 px-[10vw]">
-              <div className="max-w-[10vw] max-h-[100%] sm:mr-4 ml-[10vw] sm:ml-0 flex rounded-full">
-                <img src={friend.image} alt={friend.name} className="max-w-full max-h-full rounded-full" />
-              </div>
-              <p>{friend.name}</p>
-              <Link href={`/viewfriends/${friend.id}`}>
-                <p className="bg-blue-500 text-white px-4 py-2 rounded transition hover:bg-white hover:text-blue-500 hover:border-blue-500 border border-blue-500 w-[60px] text-center text-[.5rem]">See Details</p>
-              </Link>
-            </div>
-          ))
+          <>
+            <table className="min-w-full">
+              <thead>
+                <tr>
+                  <th className="py-2 px-4 border-b border-gray-300 w-1/6"></th>
+                  <th className="py-2 px-4 border-b border-gray-300">Name</th>
+                  <th className="py-2 px-4 border-b border-gray-300">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {idFriends.map((friend) => (
+                  <tr key={friend.id}>
+                    <td className="py-2 px-4 border-b border-gray-300 text-center">
+                      <img src={friend.image} alt="" width={50} height={50}/>
+                    </td>
+                    <td className="py-2 px-4 border-b border-gray-300 text-center">{friend.name}</td>
+                    <td className="py-2 px-4 border-b border-gray-300 text-center">
+                      <Link href={`/viewfriends/${friend.id}`}>
+                        <p className="bg-blue-500 text-white px-4 py-2 rounded transition hover:bg-white hover:text-blue-500 hover:border-blue-500 border border-blue-500 w-[60px] text-center text-[.5rem]">See</p>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
         )}
       </div>
     </Layout>
@@ -33,4 +48,3 @@ const Page = async () => {
 };
 
 export default Page;
-  

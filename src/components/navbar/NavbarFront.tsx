@@ -46,12 +46,12 @@ export default function NavbarFront(props) {
             {!idUser || idUser== null ? (
                 <NavbarContent>
                     <Link href="/register">
-                        <Button color="primary">
+                        <Button color="primary" size="sm">
                             SigIn
                         </Button>
                     </Link>
                     <Link href="/login">
-                        <Button color="success">
+                        <Button color="warning" size="sm">
                             LogIn
                         </Button>
                     </Link>
